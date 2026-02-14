@@ -25,37 +25,50 @@ Predict the CO2 emission of a car where the weight is 2300kg, and the volume is 
 ```
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import datasets, linear_model, metrics
-
-# ✅ load the California housing dataset (replacement for Boston)
-housing = datasets.fetch_california_housing()
-
-# defining feature matrix (X) and response vector (y)
-X = housing.data
-y = housing.target
-
-# splitting X and y into training and testing sets
+import pandas as pd
+from sklearn import linear_model
 from sklearn.model_selection import train_test_split
+
+# -----------------------------
+# Load the Boston dataset properly
+# -----------------------------
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep=r"\s+", skiprows=22, header=None)
+
+# Correct reshaping (VERY IMPORTANT)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
+
+# Remove any NaN values (safety check)
+mask = ~(np.isnan(data).any(axis=1) | np.isnan(target))
+X = data[mask]
+y = target[mask]
+
+# -----------------------------
+# Split into train and test sets
+# -----------------------------
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.4, random_state=1
 )
 
-# create linear regression object
+# -----------------------------
+# Create and train Linear Regression model
+# -----------------------------
 reg = linear_model.LinearRegression()
-
-# train the model using the training sets
 reg.fit(X_train, y_train)
 
-# regression coefficients
+# -----------------------------
+# Print Results
+# -----------------------------
 print("Coefficients:", reg.coef_)
+print("Variance score:", reg.score(X_test, y_test))
 
-# variance score: 1 means perfect prediction
-print("Variance score: {}".format(reg.score(X_test, y_test)))
-
-# plot for residual error
+# -----------------------------
+# Plot Residual Errors
+# -----------------------------
 plt.style.use("fivethirtyeight")
 
-# plotting residual errors in training data
+# Training residuals
 plt.scatter(
     reg.predict(X_train),
     reg.predict(X_train) - y_train,
@@ -64,7 +77,7 @@ plt.scatter(
     label="Train data",
 )
 
-# plotting residual errors in test data
+# Testing residuals
 plt.scatter(
     reg.predict(X_test),
     reg.predict(X_test) - y_test,
@@ -73,16 +86,11 @@ plt.scatter(
     label="Test data",
 )
 
-# plotting line for zero residual error
-plt.hlines(y=0, xmin=0, xmax=max(reg.predict(X_test)), linewidth=2)
+# Zero residual line
+plt.hlines(y=0, xmin=0, xmax=50, linewidth=2)
 
-# plotting legend
 plt.legend(loc="upper right")
-
-# plot title
 plt.title("Residual errors")
-
-# show plot
 plt.show()
 
 
@@ -92,12 +100,12 @@ plt.show()
 
 ```
 ## Output:
+<img width="655" height="68" alt="Screenshot 2026-02-14 085631" src="https://github.com/user-attachments/assets/8ca57bd6-f6f1-457c-9ad1-2068dce9820d" />
 
-<img width="676" height="82" alt="Screenshot 2026-02-14 082833" src="https://github.com/user-attachments/assets/76a55b06-a565-4463-bfaf-52f099377bcb" />
 
 ### Insert your output
+<img width="640" height="480" alt="Figure_1" src="https://github.com/user-attachments/assets/19d04a7a-9932-4d97-ab62-224c6a0e5fcd" />
 
-<img width="640" height="480" alt="Figure_1" src="https://github.com/user-attachments/assets/ea4e3f8c-c8da-4b78-9e02-ada0d0a59b51" />
 
 
 ## Result
