@@ -100,7 +100,7 @@ plt.show()
 
 ```
 ## Output:
-<img width="655" height="68" alt="Screenshot 2026-02-14 085631" src="https://github.com/user-attachments/assets/8ca57bd6-f6f1-457c-9ad1-2068dce9820d" />
+<img width="675" height="85" alt="Screenshot 2026-02-14 085852" src="https://github.com/user-attachments/assets/5fd4a813-0f47-4fb1-856c-07873006c719" />
 
 
 ### Insert your output
